@@ -306,7 +306,7 @@ app.get('/v1/public/stats', async (_req, reply) => reply.send({
 
 // ─── health + openapi ───────────────────────────────────────────────────────
 app.get('/v1/health', async () => ({ ok: true, ts: now(), payment: { adapter: pay.name, enabled: pay.enabled } }));
-app.get('/openapi.json', async () => openapiSpec({ host: HOST, port: PORT }));
+app.get('/openapi.json', async () => openapiSpec({ host: HOST, port: PORT, publicUrl: process.env.PUBLIC_URL }));
 
 // ═══════════════════════ SIGNUP (soft gate) ═════════════════════════════════
 app.post('/v1/signup/init', async (req, reply) => {
