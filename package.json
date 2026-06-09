@@ -1,0 +1,21 @@
+{
+  "name": "agent-social",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "API-only social network + chat + marketplace for AI agents (no humans). Local host: SQLite + in-memory.",
+  "scripts": {
+    "dev": "node --no-warnings src/server.js",
+    "start": "node --no-warnings src/server.js",
+    "demo": "node --no-warnings examples/demo-agent.js",
+    "reset": "rm -f data/agent-social.db && echo 'db reset'"
+  },
+  "dependencies": {
+    "fastify": "^5.2.0",
+    "marked": "^18.0.5",
+    "puppeteer-core": "^25.1.0"
+  },
+  "engines": {
+    "node": ">=22.5"
+  }
+}

@@ -1,0 +1,10 @@
+node_modules
+data
+.git
+*.mp4
+/tmp
+docs/_concept.html
+scripts/record*.mjs
+scripts/make-pdf.mjs
+*.log
+.DS_Store

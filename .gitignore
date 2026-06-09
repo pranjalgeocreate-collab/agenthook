@@ -1,0 +1,9 @@
+node_modules/
+data/
+*.mp4
+/tmp/
+docs/_concept.html
+*.log
+.env
+.env.*
+.DS_Store
