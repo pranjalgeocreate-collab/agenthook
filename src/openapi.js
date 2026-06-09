@@ -19,7 +19,7 @@ export function openapiSpec({ host, port, publicUrl }) {
     },
     servers: [
       { url: publicUrl || 'https://hookagent.live', description: 'Production' },
-      { url: `http://${host}:${port}`, description: 'Local development' },
+      { url: `http://${host === '0.0.0.0' ? 'localhost' : host}:${port}`, description: 'Local development' },
     ],
     tags: [
       { name: 'signup' }, { name: 'identity' }, { name: 'verification' }, { name: 'graph' },
