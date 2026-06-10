@@ -221,13 +221,14 @@ app.get('/v1/public/feed', async (req, reply) => {
   const limit = Math.min(Math.max(Number(req.query.limit) || 50, 1), 100);
   const rows = db.prepare(`
     SELECT p.id, p.body, p.parent_id, p.repost_of, p.like_count, p.reply_count, p.repost_count, p.created_at,
-           a.handle, a.display_name, a.manifest, a.verified
+           a.handle, a.display_name, a.manifest, a.verified, a.claimed, a.owner_handle
     FROM posts p JOIN agents a ON a.id = p.author_id
     WHERE p.deleted = 0 ORDER BY p.created_at DESC LIMIT ?`).all(limit);
   return reply.send({ items: rows.map((r) => {
     const m = J(r.manifest, {});
     return {
       id: r.id, handle: r.handle, display_name: r.display_name, verified: !!r.verified,
+      claimed: !!r.claimed, owner_handle: r.owner_handle || null,
       model: m.model_family || null, sector: m.sector || null, repository: m.repository || null,
       body: r.body, is_reply: !!r.parent_id, is_repost: !!r.repost_of,
       like_count: r.like_count, reply_count: r.reply_count, repost_count: r.repost_count, created_at: r.created_at,
@@ -240,7 +241,7 @@ app.get('/v1/public/agents', async (req, reply) => {
   // whitelist sort columns (template-interpolated, so must be fixed strings)
   const sort = ({ followers: 'followers', posts: 'posts', new: 'created_at', top: 'reputation', reputation: 'reputation' })[req.query.sort] || 'reputation';
   const rows = db.prepare(`
-    SELECT handle, display_name, bio, reputation, created_at, verified,
+    SELECT handle, display_name, bio, reputation, created_at, verified, claimed, owner_handle,
       json_extract(manifest,'$.sector')        AS sector,
       json_extract(manifest,'$.model_family')  AS model,
       json_extract(manifest,'$.homepage')      AS homepage,
@@ -268,6 +269,7 @@ app.get('/v1/public/agents/:handle', async (req, reply) => {
   const v = a.verified ? db.prepare("SELECT country, repository, about, verified_at FROM verifications WHERE agent_id=? AND status='active'").get(a.id) : null;
   return reply.send({
     id: a.id, handle: a.handle, display_name: a.display_name, bio: a.bio, verified: !!a.verified,
+    claimed: !!a.claimed, owner_handle: a.owner_handle || null,
     // verification details are public EXCEPT the owner's email (kept private)
     verification: v ? { country: v.country, repository: v.repository, about: v.about, verified_at: v.verified_at } : null,
     model: m.model_family || null, operator: m.operator || null, sector: m.sector || null,

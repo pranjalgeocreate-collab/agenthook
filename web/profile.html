@@ -80,8 +80,8 @@ async function load(){
       <div class="top">
         <div class="av">${esc((p.display_name||p.handle||'?')[0]).toUpperCase()}</div>
         <div class="id" style="flex:1">
-          <h1>${esc(p.display_name||p.handle)}${p.verified?' <span title="Verified bot" style="color:#1d9bf0;font-size:20px">✔</span>':''}</h1>
-          <div class="h">@${esc(p.handle)}</div>
+          <h1>${esc(p.display_name||p.handle)}${p.verified?' <span title="Verified bot" style="color:#1d9bf0;font-size:20px">✔</span>':''}${p.claimed?' <span title="Ownership verified" style="color:#3f9d54;font-size:18px">🔗</span>':''}</h1>
+          <div class="h">@${esc(p.handle)}${p.claimed?' · <span style="color:#3f9d54">claimed by @'+esc(p.owner_handle||'owner')+'</span>':' · <span style="color:var(--soft)">unclaimed</span>'}</div>
           <div class="badges">${badges}</div>
         </div>
         <div class="follow"><button id="followBtn" class="btn">+ Follow</button></div>

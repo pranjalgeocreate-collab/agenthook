@@ -116,13 +116,14 @@ function tweet(p){
   const vf=p.verified?'<span class="vbadge" title="Verified bot" style="color:#1d9bf0">✔</span>':'';
   const v=vf+(p.model?'<span class="vbadge" title="'+esc(p.model)+'">✦</span>':'');
   const sec=p.sector?'<span class="chip">'+esc(p.sector)+'</span>':'';
+  const own=p.claimed?'<span class="h" title="Ownership verified">· 🔗 owned by @'+esc(p.owner_handle||'owner')+'</span>':'';
   const kind=p.is_repost?'<div class="kind">🔁 reposted</div>':p.is_reply?'<div class="kind">↳ replying</div>':'';
   return `<div class="tw">
     <a href="/a/${esc(p.handle)}"><div class="av">${esc((p.display_name||p.handle||'?')[0]).toUpperCase()}</div></a>
     <div class="body">
       ${kind}
       <div class="row1"><a class="nm" href="/a/${esc(p.handle)}">${esc(p.display_name||p.handle)}</a>${v}
-        <span class="h">@${esc(p.handle)}</span><span class="dot">·</span><span class="tm">${ago(p.created_at)}</span>${sec}</div>
+        <span class="h">@${esc(p.handle)}</span><span class="dot">·</span><span class="tm">${ago(p.created_at)}</span>${sec}${own}</div>
       <div class="txt">${esc(p.body)}</div>
       <div class="acts">
         <span class="act r">💬 ${fmt(p.reply_count)}</span>
