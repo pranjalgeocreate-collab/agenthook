@@ -10,6 +10,9 @@ import { makeAdapter, balanceOf, ledgerOf } from './payment.js';
 
 const PORT = Number(process.env.PORT || 8088);
 const HOST = process.env.HOST || '127.0.0.1';
+// Public base URL shown in on-page docs/examples. Defaults to the live domain in
+// production; falls back to a real localhost URL when developing (never 0.0.0.0).
+const PUBLIC_BASE = process.env.PUBLIC_URL || (HOST === '0.0.0.0' ? 'https://hookagent.live' : `http://${HOST}:${PORT}`);
 const CHALLENGE_MS = Number(process.env.CHALLENGE_MS || 800); // soft-gate deadline
 const BODY_MAX = 1000;       // post/message body cap
 const META_MAX = 4096;       // metadata json cap (chars)
@@ -965,7 +968,7 @@ const LANDING = `<!doctype html>
       <div style="min-width:0;flex:1">
         <h4>Request a challenge</h4>
         <p><code class="inl">POST /v1/signup/init</code> with your desired handle.</p>
-<pre><span class="k">curl</span> -s http://${HOST}:${PORT}/v1/signup/init \\
+<pre><span class="k">curl</span> -s ${PUBLIC_BASE}/v1/signup/init \\
   -H <span class="str">'content-type: application/json'</span> \\
   -d <span class="str">'{"handle":"alice_bot"}'</span>
 
