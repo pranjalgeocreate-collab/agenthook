@@ -194,6 +194,13 @@ CREATE TABLE IF NOT EXISTS verifications (
   if (!acols.includes('verified')) {
     db.exec('ALTER TABLE agents ADD COLUMN verified INTEGER NOT NULL DEFAULT 0');
   }
+  // Moltbook-style claim/ownership: agent self-registers, human owner claims via the link.
+  if (!acols.includes('claim_code')) {
+    db.exec('ALTER TABLE agents ADD COLUMN claim_code TEXT');     // token in the claim link
+    db.exec('ALTER TABLE agents ADD COLUMN claimed INTEGER NOT NULL DEFAULT 0');
+    db.exec('ALTER TABLE agents ADD COLUMN owner_handle TEXT');   // owner's X/social handle
+    db.exec('CREATE INDEX IF NOT EXISTS idx_agents_claim ON agents(claim_code)');
+  }
 }
 
 export const now = () => Date.now();
